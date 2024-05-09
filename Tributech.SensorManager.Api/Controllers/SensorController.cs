@@ -2,10 +2,10 @@
 
 using Microsoft.AspNetCore.Mvc;
 
-using Tributech.SensorManager.Application.Sensors.Commands.CreateSensor;
-using Tributech.SensorManager.Application.Sensors.Commands.DeleteSensor;
-using Tributech.SensorManager.Application.Sensors.Commands.UpdateSensor;
-using Tributech.SensorManager.Application.Sensors.Queries.GetSensorQuery;
+using Tributech.SensorManager.Application.Sensors.Commands;
+using Tributech.SensorManager.Application.Sensors.Commands.Metadata;
+using Tributech.SensorManager.Application.Sensors.Queries;
+using Tributech.SensorManager.Application.Sensors.Queries.Common;
 using Tributech.SensorManager.Domain.Entities;
 
 namespace Tributech.SensorManager.Api.Controllers;
@@ -22,7 +22,7 @@ public class SensorController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<Sensor>>> GetAll()
+    public async Task<ActionResult<List<SensorVm>>> GetAll()
     {
         return Ok(await _mediator.Send(new GetAllSensorsQuery()));
     }
@@ -60,7 +60,8 @@ public class SensorController : ControllerBase
 }
 
 [ApiController]
-[Route("[controller]")]
+//[Route("[controller]")]
+[Route("/sensors/{sensorId}/metadata")]
 public class MetadataController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -70,30 +71,29 @@ public class MetadataController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpGet("/sensors/{sensorId}/metadata")]
+    [HttpGet()]
     public async Task<ActionResult<List<SensorMetadata>>> GetMetadata(Guid sensorId)
     {
-        return Ok(await _mediator.Send(new GetMetadataQuery { SensorId = sensorId }));
+        return Ok(await _mediator.Send(new GetMetadataQuery(sensorId)));
     }
 
-    [HttpPut("/sensors/{sensorId}/metadata/{key}")]
-    public async Task<IActionResult> UpdateMetadata(Guid sensorId, string key, UpdateMetadataCommand command)
+    [HttpPut("{key}")]
+    public async Task<IActionResult> UpdateMetadata(Guid sensorId, string key, UpdateSensorMetadataCommand command)
     {
-        if (sensorId != command.SensorId || key != command.Key)
+        command = command with
         {
-            return BadRequest("ID or Key mismatch");
-        }
+            SensorId = sensorId,
+            Key = key
+        };
+
         await _mediator.Send(command);
         return NoContent();
     }
 
-    [HttpDelete("/sensors/{sensorId}/metadata/{key}")]
+    [HttpDelete("{key}")]
     public async Task<IActionResult> DeleteMetadata(Guid sensorId, string key)
     {
-        await _mediator.Send(new DeleteMetadataCommand { SensorId = sensorId, Key = key });
+        await _mediator.Send(new DeleteMetadataCommand(sensorId, key));
         return NoContent();
     }
-}
-public class GetAllSensorsQuery : IRequest<List<Sensor>>
-{
 }

@@ -9,11 +9,13 @@ using System.Threading.Tasks;
 using Tributech.SensorManager.Domain.Entities;
 using Tributech.SensorManager.Infrastructure.Data;
 
-namespace Tributech.SensorManager.Application.Sensors.Commands.CreateSensor;
+namespace Tributech.SensorManager.Application.Sensors.Commands;
+
 public class CreateSensorCommand : IRequest<Sensor>
 {
     public string Name { get; set; }
 }
+
 public class CreateSensorHandler : IRequestHandler<CreateSensorCommand, Sensor>
 {
     private readonly SensorDbContext _context;

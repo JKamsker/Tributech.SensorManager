@@ -8,27 +8,28 @@ using System.Threading.Tasks;
 
 using Tributech.SensorManager.Infrastructure.Data;
 
-namespace Tributech.SensorManager.Application.Sensors.Commands.UpdateSensor;
-public class UpdateSensorCommand : IRequest
+namespace Tributech.SensorManager.Application.Sensors.Commands;
+
+public class DeleteSensorCommand : IRequest
 {
     public Guid Id { get; set; }
-    public string Name { get; set; }
 }
-public class UpdateSensorHandler : IRequestHandler<UpdateSensorCommand>
+
+public class DeleteSensorHandler : IRequestHandler<DeleteSensorCommand>
 {
     private readonly SensorDbContext _context;
 
-    public UpdateSensorHandler(SensorDbContext context)
+    public DeleteSensorHandler(SensorDbContext context)
     {
         _context = context;
     }
 
-    public async Task Handle(UpdateSensorCommand request, CancellationToken cancellationToken)
+    public async Task Handle(DeleteSensorCommand request, CancellationToken cancellationToken)
     {
         var sensor = await _context.Sensors.FindAsync(new object[] { request.Id }, cancellationToken);
         if (sensor == null) throw new InvalidOperationException("Sensor not found");
 
-        sensor.Name = request.Name;
+        _context.Sensors.Remove(sensor);
         await _context.SaveChangesAsync(cancellationToken);
     }
 }

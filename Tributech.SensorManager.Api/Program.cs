@@ -1,3 +1,6 @@
+using System.Text.Json;
+
+using Tributech.SensorManager.Application;
 using Tributech.SensorManager.Infrastructure;
 
 namespace Tributech.SensorManager.Api;
@@ -10,13 +13,25 @@ public class Program
 
         // Add services to the container.
 
-        builder.Services.AddControllers();
+        builder.Services
+            .AddControllers()
+            .AddJsonOptions(options =>
+            {
+                // Configure the JSON serializer options here
+                options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+                options.JsonSerializerOptions.IgnoreNullValues = true;
+
+                options.JsonSerializerOptions.ConfigureJsonOptions();
+
+                // Add more configuration options as needed
+            });
+
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
         builder.Services.AddInfrastructureServices(builder.Configuration);
-
+        builder.Services.AddMediatR(builder => builder.RegisterServicesFromAssemblyContaining<ApplicationStub>());
 
         var app = builder.Build();
 
@@ -30,7 +45,6 @@ public class Program
         app.UseHttpsRedirection();
 
         app.UseAuthorization();
-
 
         app.MapControllers();
 
