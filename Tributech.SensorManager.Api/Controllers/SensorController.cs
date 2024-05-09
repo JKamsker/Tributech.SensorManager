@@ -3,7 +3,6 @@
 using Microsoft.AspNetCore.Mvc;
 
 using Tributech.SensorManager.Application.Sensors.Commands;
-using Tributech.SensorManager.Application.Sensors.Commands.Metadata;
 using Tributech.SensorManager.Application.Sensors.Queries;
 using Tributech.SensorManager.Application.Sensors.Queries.Common;
 using Tributech.SensorManager.Domain.Entities;
@@ -55,45 +54,6 @@ public class SensorController : ControllerBase
     public async Task<IActionResult> Delete(Guid id)
     {
         await _mediator.Send(new DeleteSensorCommand { Id = id });
-        return NoContent();
-    }
-}
-
-[ApiController]
-//[Route("[controller]")]
-[Route("/sensors/{sensorId}/metadata")]
-public class MetadataController : ControllerBase
-{
-    private readonly IMediator _mediator;
-
-    public MetadataController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-
-    [HttpGet()]
-    public async Task<ActionResult<List<SensorMetadata>>> GetMetadata(Guid sensorId)
-    {
-        return Ok(await _mediator.Send(new GetMetadataQuery(sensorId)));
-    }
-
-    [HttpPut("{key}")]
-    public async Task<IActionResult> UpdateMetadata(Guid sensorId, string key, UpdateSensorMetadataCommand command)
-    {
-        command = command with
-        {
-            SensorId = sensorId,
-            Key = key
-        };
-
-        await _mediator.Send(command);
-        return NoContent();
-    }
-
-    [HttpDelete("{key}")]
-    public async Task<IActionResult> DeleteMetadata(Guid sensorId, string key)
-    {
-        await _mediator.Send(new DeleteMetadataCommand(sensorId, key));
         return NoContent();
     }
 }

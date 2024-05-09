@@ -6,7 +6,7 @@ namespace Tributech.SensorManager.Application;
 
 public static class Extensions
 {
-    public static JsonSerializerOptions ConfigureJsonOptions(this JsonSerializerOptions options)
+    public static JsonSerializerOptions ConfigureApplicationJsonOptions(this JsonSerializerOptions options)
     {
         return options
             .ConfigureGetSensorQueryJsonOptions();
