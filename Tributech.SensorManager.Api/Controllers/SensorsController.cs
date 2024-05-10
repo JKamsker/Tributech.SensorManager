@@ -1,5 +1,6 @@
 ﻿using MediatR;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using Tributech.SensorManager.Application.Sensors.Commands;
@@ -10,17 +11,21 @@ using Tributech.SensorManager.Domain.Entities;
 namespace Tributech.SensorManager.Api.Controllers;
 
 [ApiController]
-[Route("[controller]")]
-public class SensorController : ControllerBase
+[Route("sensors")]
+public class SensorsController : ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public SensorController(IMediator mediator)
+    public SensorsController(IMediator mediator)
     {
         _mediator = mediator;
     }
 
+    // https://localhost:7067/Sensor
+    // admin@tributech.io
+
     [HttpGet]
+    [Authorize]
     public async Task<ActionResult<List<SensorVm>>> GetAll()
     {
         return Ok(await _mediator.Send(new GetAllSensorsQuery()));
@@ -33,6 +38,7 @@ public class SensorController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<Sensor>> Create(CreateSensorCommand command)
     {
         var sensor = await _mediator.Send(command);
@@ -40,6 +46,7 @@ public class SensorController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Roles = "Admin, SupportLevel3")]
     public async Task<IActionResult> Update(Guid id, UpdateSensorCommand command)
     {
         if (id != command.Id)
@@ -51,6 +58,7 @@ public class SensorController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Delete(Guid id)
     {
         await _mediator.Send(new DeleteSensorCommand { Id = id });
