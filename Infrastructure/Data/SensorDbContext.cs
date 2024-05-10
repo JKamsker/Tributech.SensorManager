@@ -1,21 +1,25 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Tributech.SensorManager.Domain.Entities;
+using Tributech.SensorManager.Infrastructure.Data.Extensions;
 
 namespace Tributech.SensorManager.Infrastructure.Data;
-public class SensorDbContext : DbContext
-{
-    public SensorDbContext(DbContextOptions options) : base(options)
-    {
-    }
 
+/*
+    Remove migration:
+        dotnet ef migrations remove --project infrastructure
+    Add migration
+        dotnet ef migrations add --project Infrastructure mig_mandatoryMetadata
+    Update database
+        dotnet ef database update --project Infrastructure
+
+ */
+
+public class SensorDbContext(DbContextOptions options) : DbContext(options)
+{
     public DbSet<Sensor> Sensors { get; set; }
+    public DbSet<MandatoryMetadata> MandatoryMetadatas { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -26,9 +30,16 @@ public class SensorDbContext : DbContext
                 .IsRequired()
                 .HasMaxLength(128);
 
+            // Type is a value object
+            entity
+                .Property(s => s.Type)
+                .IsSensorType()
+                .HasMaxLength(64);
+
             // Configure SensorMetadata as an owned type
             entity.OwnsMany<SensorMetadata>("Metadata", md =>
             {
+                md.ToTable("SensorMetadata");
                 md.WithOwner().HasForeignKey("SensorId");
                 md.Property<Guid>("Id");
                 md.HasKey("Id");
@@ -38,14 +49,45 @@ public class SensorDbContext : DbContext
                 md.Property(m => m.Value)
                     .IsRequired()
                     .HasMaxLength(128);
+            });
+        });
 
-                // Configure table name if different from the default
-                // md.ToTable("SensorMetadata"); // Uncomment if a separate table is desired
+        modelBuilder.Entity<MandatoryMetadata>(entity =>
+        {
+            entity.HasKey(mm => mm.Id);
+
+            // unique SensorType
+            entity.HasIndex(mm => mm.SensorType)
+                .IsUnique();
+
+            // Type is a value object
+            entity
+                .Property(mm => mm.SensorType)
+                .IsSensorType()
+                .HasMaxLength(64);
+
+            // Configure SensorMetadata as an owned type
+            entity.OwnsMany<MandatoryMetadataItem>("Metadata", md =>
+            {
+                md.ToTable("MandatoryMetadataItems");
+                md.WithOwner().HasForeignKey("MandatoryMetadataId");
+                md.Property<Guid>("Id");
+                md.HasKey("Id");
+
+                md.Property(m => m.Key)
+                    .IsRequired()
+                    .HasMaxLength(64);
+
+                md.Property(m => m.Type)
+                    .IsRequired()
+                    .HasMaxLength(64);
+
+                md.Property(m => m.DefaultValue)
+                    .HasMaxLength(128);
             });
         });
     }
 }
-
 
 public class SensorDbContextFactory : IDesignTimeDbContextFactory<SensorDbContext>
 {

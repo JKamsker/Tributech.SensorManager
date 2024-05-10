@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Tributech.SensorManager.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using Tributech.SensorManager.Infrastructure.Data;
 namespace Tributech.SensorManager.Infrastructure.Migrations
 {
     [DbContext(typeof(SensorDbContext))]
-    partial class SensorDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240510220649_mig_mandatoryMetadata_add_fields")]
+    partial class mig_mandatoryMetadata_add_fields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,10 +38,7 @@ namespace Tributech.SensorManager.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SensorType")
-                        .IsUnique();
-
-                    b.ToTable("MandatoryMetadatas");
+                    b.ToTable("MandatoryMetadata");
                 });
 
             modelBuilder.Entity("Tributech.SensorManager.Domain.Entities.Sensor", b =>

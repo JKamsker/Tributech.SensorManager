@@ -13,6 +13,7 @@ using System.Security.Cryptography;
 using System.Text.Json;
 
 using Tributech.SensorManager.Application;
+using Tributech.SensorManager.Domain.Extensions;
 
 namespace Tributech.SensorManager.Api;
 
@@ -28,7 +29,10 @@ public static class Extensions
             options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
             options.JsonSerializerOptions.IgnoreNullValues = true;
 
-            options.JsonSerializerOptions.ConfigureApplicationJsonOptions();
+            options.JsonSerializerOptions
+                .ConfigureApplicationJsonOptions()
+                .ConfigureDomainJsonOptions()
+                ;
 
             // Add more configuration options as needed
 

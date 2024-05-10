@@ -6,6 +6,7 @@ using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text.Json;
 
+using Tributech.SensorManager.Api.SchemaFilters;
 using Tributech.SensorManager.Application;
 using Tributech.SensorManager.Application.Behavior;
 using Tributech.SensorManager.Infrastructure;
@@ -36,7 +37,11 @@ public class Program
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+        builder.Services.AddSwaggerGen(c =>
+        {
+            c.SchemaFilter<SensorTypeSchemaFilter>();
+            c.SchemaFilter<SensorMetadataVmSchemaFilter>();
+        });
 
         builder.Services.AddInfrastructureServices(builder.Configuration);
         builder.Services.AddMediatR(builder =>

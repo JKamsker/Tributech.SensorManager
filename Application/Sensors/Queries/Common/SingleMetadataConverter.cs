@@ -111,13 +111,3 @@ public class SingleMetadataConverter : JsonConverter<IEnumerable<SensorMetadataV
         writer.WriteEndObject();
     }
 }
-
-// Extension class to add SingleMetadataConverter
-public static class Extensions
-{
-    public static JsonSerializerOptions ConfigureGetSensorQueryJsonOptions(this JsonSerializerOptions options)
-    {
-        options.Converters.Add(new SingleMetadataConverter());
-        return options;
-    }
-}

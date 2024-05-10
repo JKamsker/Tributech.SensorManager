@@ -8,7 +8,8 @@ public static class Extensions
 {
     public static JsonSerializerOptions ConfigureApplicationJsonOptions(this JsonSerializerOptions options)
     {
-        return options
-            .ConfigureGetSensorQueryJsonOptions();
+        // If this gets too much, split it up into namespaces.
+        options.Converters.Add(new SingleMetadataConverter());
+        return options;
     }
 }

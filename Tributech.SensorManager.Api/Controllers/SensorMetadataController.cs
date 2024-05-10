@@ -13,11 +13,11 @@ namespace Tributech.SensorManager.Api.Controllers;
 
 [ApiController, ApiVersion("1")]
 [Route("api/v{version:apiVersion}/sensors/{sensorId}/metadata")]
-public class MetadataController : ControllerBase
+public class SensorMetadataController : ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public MetadataController(IMediator mediator)
+    public SensorMetadataController(IMediator mediator)
     {
         _mediator = mediator;
     }

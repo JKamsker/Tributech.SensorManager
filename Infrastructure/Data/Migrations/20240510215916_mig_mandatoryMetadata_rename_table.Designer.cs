@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Tributech.SensorManager.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using Tributech.SensorManager.Infrastructure.Data;
 namespace Tributech.SensorManager.Infrastructure.Migrations
 {
     [DbContext(typeof(SensorDbContext))]
-    partial class SensorDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240510215916_mig_mandatoryMetadata_rename_table")]
+    partial class mig_mandatoryMetadata_rename_table
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,10 +38,7 @@ namespace Tributech.SensorManager.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SensorType")
-                        .IsUnique();
-
-                    b.ToTable("MandatoryMetadatas");
+                    b.ToTable("MandatoryMetadata");
                 });
 
             modelBuilder.Entity("Tributech.SensorManager.Domain.Entities.Sensor", b =>
@@ -64,15 +64,11 @@ namespace Tributech.SensorManager.Infrastructure.Migrations
 
             modelBuilder.Entity("Tributech.SensorManager.Domain.Entities.MandatoryMetadata", b =>
                 {
-                    b.OwnsMany("Tributech.SensorManager.Domain.Entities.MandatoryMetadataItem", "Metadata", b1 =>
+                    b.OwnsMany("Tributech.SensorManager.Domain.Entities.SensorMetadata", "Metadata", b1 =>
                         {
                             b1.Property<Guid>("Id")
                                 .ValueGeneratedOnAdd()
                                 .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("DefaultValue")
-                                .HasMaxLength(128)
-                                .HasColumnType("nvarchar(128)");
 
                             b1.Property<string>("Key")
                                 .IsRequired()
@@ -82,10 +78,10 @@ namespace Tributech.SensorManager.Infrastructure.Migrations
                             b1.Property<Guid>("MandatoryMetadataId")
                                 .HasColumnType("uniqueidentifier");
 
-                            b1.Property<string>("Type")
+                            b1.Property<string>("Value")
                                 .IsRequired()
-                                .HasMaxLength(64)
-                                .HasColumnType("nvarchar(64)");
+                                .HasMaxLength(128)
+                                .HasColumnType("nvarchar(128)");
 
                             b1.HasKey("Id");
 
