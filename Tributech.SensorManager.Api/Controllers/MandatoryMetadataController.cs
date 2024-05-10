@@ -61,10 +61,10 @@ public class MandatoryMetadataController : ControllerBase
         }
     }
 
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Update(Guid id, [FromBody] UpdateMandatoryMetadataCommand command)
+    [HttpPut("{sensorType}")]
+    public async Task<IActionResult> Update(string sensorType, [FromBody] UpdateMandatoryMetadataCommand command)
     {
-        command.Id = id;
+        command.Type = sensorType;
 
         try
         {

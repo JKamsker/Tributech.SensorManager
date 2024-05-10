@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
 using Tributech.SensorManager.Application.MandatoryMetadatas.Common;
+using Tributech.SensorManager.Domain.ValueTypes;
 using Tributech.SensorManager.Infrastructure.Data;
 
 namespace Tributech.SensorManager.Application.MandatoryMetadatas.Commands;
@@ -14,6 +15,8 @@ public class UpdateMandatoryMetadataCommand : IRequest
 {
     [JsonIgnore]
     public Guid? Id { get; set; }
+
+    public SensorType? Type { get; set; }
 
     public ICollection<MandatoryMetadataItemVm> Metadata { get; set; } = [];
 }
