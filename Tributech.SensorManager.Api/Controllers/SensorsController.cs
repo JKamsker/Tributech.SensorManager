@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿using Asp.Versioning;
+
+using MediatR;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,8 +12,8 @@ using Tributech.SensorManager.Domain.Entities;
 
 namespace Tributech.SensorManager.Api.Controllers;
 
-[ApiController]
-[Route("sensors")]
+[ApiController, ApiVersion("1")]
+[Route("api/v{version:apiVersion}/sensors")]
 public class SensorsController : ControllerBase
 {
     private readonly IMediator _mediator;

@@ -1,5 +1,7 @@
 using FluentValidation;
 
+using Microsoft.Extensions.Configuration;
+
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text.Json;
@@ -24,8 +26,13 @@ public class Program
         // Add services to the container.
 
         builder.Services
-            .AddControllers()
-            .ConfigureJsonOptions();
+            .AddControllers(x =>
+            {
+            })
+            .ConfigureJsonOptions()
+
+            ;
+        builder.Services.AddApiVersioning();
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
