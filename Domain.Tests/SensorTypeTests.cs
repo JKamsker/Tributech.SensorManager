@@ -1,4 +1,4 @@
-using Tributech.SensorManager.Domain.ValueTypes;
+using Tributech.SensorManager.Domain.ValueObjects;
 
 namespace Domain.Tests;
 

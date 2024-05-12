@@ -3,7 +3,7 @@
 using Tributech.SensorManager.Application.Data;
 using Tributech.SensorManager.Application.Queries;
 using Tributech.SensorManager.Domain.Entities;
-using Tributech.SensorManager.Domain.ValueTypes;
+using Tributech.SensorManager.Domain.ValueObjects;
 
 namespace Tributech.SensorManager.Infrastructure.Queries;
 

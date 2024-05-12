@@ -7,6 +7,9 @@
 
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
+
+	  <RootNamespace>Tributech.SensorManager.Domain.Tests</RootNamespace>
+	  <AssemblyName>Tributech.SensorManager.Domain.Tests</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

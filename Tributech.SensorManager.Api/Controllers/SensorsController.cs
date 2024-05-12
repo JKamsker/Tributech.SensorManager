@@ -34,14 +34,14 @@ public class SensorsController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<Sensor>> Get(Guid id)
+    public async Task<ActionResult<SensorVm>> Get(Guid id)
     {
         return Ok(await _mediator.Send(new GetSensorQuery { Id = id }));
     }
 
     [HttpPost]
     [Authorize(Roles = "Admin")]
-    public async Task<ActionResult<Sensor>> Create(CreateSensorCommand command)
+    public async Task<ActionResult<SensorVm>> Create(CreateSensorCommand command)
     {
         var sensor = await _mediator.Send(command);
         return CreatedAtAction(nameof(Get), new { id = sensor.Id }, sensor);

@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-using Tributech.SensorManager.Domain.ValueTypes;
+using Tributech.SensorManager.Domain.ValueObjects;
 
 namespace Tributech.SensorManager.Domain.Extensions;
 

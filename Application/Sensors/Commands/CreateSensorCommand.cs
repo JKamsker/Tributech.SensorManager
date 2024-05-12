@@ -2,21 +2,22 @@
 
 using Tributech.SensorManager.Application.Queries;
 using Tributech.SensorManager.Application.Sensors.Common;
+using Tributech.SensorManager.Application.Sensors.Queries.Common;
 using Tributech.SensorManager.Domain.Entities;
-using Tributech.SensorManager.Domain.ValueTypes;
+using Tributech.SensorManager.Domain.ValueObjects;
 
 namespace Tributech.SensorManager.Application.Sensors.Commands;
 
-public class CreateSensorCommand : IRequest<Sensor>
+public class CreateSensorCommand : IRequest<SensorVm>
 {
     public string Name { get; set; }
     public SensorType Type { get; set; }
     public IEnumerable<SensorMetadataVm>? Metadata { get; set; }
 }
 
-public class CreateSensorHandler(ISensorContext _context, ISensorQueries _sensorQueries) : IRequestHandler<CreateSensorCommand, Sensor>
+public class CreateSensorHandler(ISensorContext _context, ISensorQueries _sensorQueries) : IRequestHandler<CreateSensorCommand, SensorVm>
 {
-    public async Task<Sensor> Handle(CreateSensorCommand request, CancellationToken cancellationToken)
+    public async Task<SensorVm> Handle(CreateSensorCommand request, CancellationToken cancellationToken)
     {
         var sensor = new Sensor
         {
@@ -33,7 +34,7 @@ public class CreateSensorHandler(ISensorContext _context, ISensorQueries _sensor
 
         _context.Sensors.Add(sensor);
         await _context.SaveChangesAsync(cancellationToken);
-        return sensor;
+        return new(sensor);
     }
 
     private async Task CheckMandatoryMetadata(Sensor sensor)

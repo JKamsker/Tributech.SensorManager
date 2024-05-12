@@ -85,7 +85,9 @@ public class SensorDbContext(DbContextOptions options) : DbContext(options), ISe
                     .HasMaxLength(64);
 
                 md.Property(m => m.Type)
+                    .IsDataType()
                     .IsRequired()
+                    .HasDefaultValue(Domain.ValueObjects.ValueType.None)
                     .HasMaxLength(64);
 
                 md.Property(m => m.DefaultValue)

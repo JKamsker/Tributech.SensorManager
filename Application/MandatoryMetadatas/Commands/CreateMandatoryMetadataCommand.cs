@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 using Tributech.SensorManager.Application.MandatoryMetadatas.Common;
 using Tributech.SensorManager.Domain.Entities;
-using Tributech.SensorManager.Domain.ValueTypes;
+using Tributech.SensorManager.Domain.ValueObjects;
 
 namespace Tributech.SensorManager.Application.MandatoryMetadatas.Commands;
 

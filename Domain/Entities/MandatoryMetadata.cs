@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 
 using Tributech.SensorManager.Domain.Helpers;
-using Tributech.SensorManager.Domain.ValueTypes;
+using Tributech.SensorManager.Domain.ValueObjects;
 
 namespace Tributech.SensorManager.Domain.Entities;
 
@@ -18,9 +18,8 @@ public class MandatoryMetadata
         SensorType = sensorType;
     }
 
-    public void AddOrUpdateMetadata(string key, string type, string? defaultValue)
+    public void AddOrUpdateMetadata(string key, ValueObjects.ValueType type, string? defaultValue)
     {
-        //Metadata.Add(new MandatoryMetadataItem { Key = key, Type = type, DefaultValue = defaultValue });
         var entry = Metadata.FirstOrDefault(m => m.Key == key);
         if (entry == null)
         {
@@ -66,6 +65,6 @@ public class MandatoryMetadata
 public class MandatoryMetadataItem
 {
     public string Key { get; set; }
-    public string Type { get; set; }
+    public ValueObjects.ValueType Type { get; set; }
     public string? DefaultValue { get; set; }
 }

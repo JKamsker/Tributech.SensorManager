@@ -1,14 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-using Tributech.SensorManager.Domain.ValueObjects;
-
 namespace Tributech.SensorManager.Infrastructure.Data.ValueComparer;
 
-// ValueComparer for EfCore
-
-public class SensorTypeComparer : ValueComparer<SensorType>
+// DataType
+public class DataTypeComparer : ValueComparer<Domain.ValueObjects.ValueType>
 {
-    public SensorTypeComparer() : base
+    public DataTypeComparer() : base
     (
         equalsExpression: (c1, c2) => c1.Value == c2.Value,
         hashCodeExpression: c => c.Value.GetHashCode(),

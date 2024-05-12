@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 using System.Text.Json;
 
-namespace Tributech.SensorManager.Domain.ValueTypes;
+namespace Tributech.SensorManager.Domain.ValueObjects;
 public record SensorType : IValueType<string>
 {
     public string Value { get; }
@@ -105,8 +105,8 @@ internal class ValueTypeMap<TStatus> : IEnumerable<(string Key, TStatus Value)>
             var newMap = new Dictionary<string, TStatus>(currentMap, StringComparer.OrdinalIgnoreCase);
 
             // true, if another thread added the value already
-            var alreadyAddesd = !newMap.TryAdd(key, value);
-            if (alreadyAddesd)
+            var alreadyAdded = !newMap.TryAdd(key, value);
+            if (alreadyAdded)
             {
                 return newMap[key];
             }

@@ -10,15 +10,8 @@ public class GetAllSensorsQuery : IRequest<List<SensorVm>>
 {
 }
 
-public class GetAllSensorsHandler : IRequestHandler<GetAllSensorsQuery, List<SensorVm>>
+public class GetAllSensorsHandler(ISensorContext _context) : IRequestHandler<GetAllSensorsQuery, List<SensorVm>>
 {
-    private readonly ISensorContext _context;
-
-    public GetAllSensorsHandler(ISensorContext context)
-    {
-        _context = context;
-    }
-
     public async Task<List<SensorVm>> Handle(GetAllSensorsQuery request, CancellationToken cancellationToken)
     {
         return await _context.Sensors

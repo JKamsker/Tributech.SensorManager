@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 using Tributech.SensorManager.Domain.Abstractions;
-using Tributech.SensorManager.Domain.ValueTypes;
+using Tributech.SensorManager.Domain.ValueObjects;
 
 namespace Tributech.SensorManager.Domain.Entities;
 
@@ -61,7 +61,7 @@ public class Sensor
             .SelectMany(x => x.Metadata)
             .DistinctBy(x => x.Key);
 
-        CheckMandatoryMeatadata(metadataItems);
+        CheckMandatoryMetadata(metadataItems);
     }
 
     /// <summary>
@@ -72,24 +72,33 @@ public class Sensor
     /// </summary>
     /// <param name="collection"></param>
     /// <exception cref="NotImplementedException"></exception>
-    public void CheckMandatoryMeatadata(IEnumerable<MandatoryMetadataItem> collection)
+    public void CheckMandatoryMetadata(IEnumerable<MandatoryMetadataItem> collection)
     {
         foreach (var item in collection)
         {
             var metadata = Metadata.FirstOrDefault(m => m.Key == item.Key);
-
-            if (metadata != null)
-            {
-                continue;
-            }
-
-            if (item.DefaultValue == null)
-            {
-                throw new ValidationException($"Mandatory metadata '{item.Key}' is not set for sensor '{Name}'");
-            }
-
-            SetMetadata(item.Key, item.DefaultValue);
+            CheckMandatoryMetadata(metadata, item);
         }
+    }
+
+    private void CheckMandatoryMetadata(SensorMetadata metadata, MandatoryMetadataItem item)
+    {
+        if (metadata != null)
+        {
+            if (item.Type.IsValid(metadata.Value) == false)
+            {
+                throw new ValidationException($"Mandatory metadata '{item.Key}' has invalid default value '{item.DefaultValue}' for sensor '{Name}'");
+            }
+
+            return;
+        }
+
+        if (item.DefaultValue == null)
+        {
+            throw new ValidationException($"Mandatory metadata '{item.Key}' is not set for sensor '{Name}'");
+        }
+
+        SetMetadata(item.Key, item.DefaultValue);
     }
 }
 

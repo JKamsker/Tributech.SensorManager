@@ -1,6 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using System.Text.Json;
 using Tributech.SensorManager.Application.Sensors.Common;
+using Microsoft.Extensions.Options;
 
 namespace Tributech.SensorManager.Application.Sensors.Queries.Common;
 
@@ -49,13 +50,13 @@ public class SingleMetadataConverter : JsonConverter<IEnumerable<SensorMetadataV
 
         if (reader.TokenType == JsonTokenType.StartArray)
         {
-            return ReadAsArray(ref reader);
+            return ReadAsArray(ref reader, options);
         }
 
         throw new JsonException("Expected StartObject token.");
     }
 
-    private List<SensorMetadataVm> ReadAsArray(ref Utf8JsonReader reader)
+    private List<SensorMetadataVm> ReadAsArray(ref Utf8JsonReader reader, JsonSerializerOptions options)
     {
         var list = new List<SensorMetadataVm>();
         while (reader.Read())
@@ -67,7 +68,7 @@ public class SingleMetadataConverter : JsonConverter<IEnumerable<SensorMetadataV
 
             if (reader.TokenType == JsonTokenType.StartObject)
             {
-                var metadata = JsonSerializer.Deserialize<SensorMetadataVm>(ref reader);
+                var metadata = JsonSerializer.Deserialize<SensorMetadataVm>(ref reader, options);
                 list.Add(metadata);
             }
         }
