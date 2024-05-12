@@ -37,9 +37,4 @@
 	  <ProjectReference Include="..\Domain\Domain.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Repositories\" />
-	  <Folder Include="Queries\" />
-	</ItemGroup>
-
 </Project>

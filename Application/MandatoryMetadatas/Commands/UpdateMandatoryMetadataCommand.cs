@@ -40,7 +40,7 @@ public class UpdateMandatoryMetadataCommandHandler : IRequestHandler<UpdateManda
             throw new InvalidOperationException($"MandatoryMetadata with Id '{request.Id}' not found.");
         }
 
-        entity.AddOrUpdateMetadata(request.Metadata.Select(m => m.AsEntity()));
+        entity.SetMetadata(request.Metadata.Select(m => m.AsEntity()));
 
         await _context.SaveChangesAsync(cancellationToken);
     }

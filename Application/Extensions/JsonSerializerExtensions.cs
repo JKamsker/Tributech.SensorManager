@@ -23,3 +23,15 @@ public static class DictionaryExtensions
         return dictionary.TryGetValue(key, out var value) ? value : default;
     }
 }
+
+// ienumerable foreach
+public static class IEnumerableExtensions
+{
+    public static void ForEach<T>(this IEnumerable<T> enumerable, Action<T> action)
+    {
+        foreach (var item in enumerable)
+        {
+            action(item);
+        }
+    }
+}

@@ -1,8 +1,6 @@
 ﻿using MediatR;
 
-using Microsoft.EntityFrameworkCore;
-
-using Tributech.SensorManager.Application.Data;
+using Tributech.SensorManager.Application.Queries;
 using Tributech.SensorManager.Application.Sensors.Common;
 using Tributech.SensorManager.Domain.Entities;
 using Tributech.SensorManager.Domain.ValueTypes;
@@ -16,7 +14,7 @@ public class CreateSensorCommand : IRequest<Sensor>
     public IEnumerable<SensorMetadataVm>? Metadata { get; set; }
 }
 
-public class CreateSensorHandler(ISensorContext _context) : IRequestHandler<CreateSensorCommand, Sensor>
+public class CreateSensorHandler(ISensorContext _context, ISensorQueries _sensorQueries) : IRequestHandler<CreateSensorCommand, Sensor>
 {
     public async Task<Sensor> Handle(CreateSensorCommand request, CancellationToken cancellationToken)
     {
@@ -25,9 +23,10 @@ public class CreateSensorHandler(ISensorContext _context) : IRequestHandler<Crea
             Name = request.Name,
             Type = request.Type,
         };
-        foreach (var metadata in request.Metadata ?? [])
+
+        if (request.Metadata != null)
         {
-            sensor.SetMetadata(metadata.Key, metadata.Value);
+            sensor.SetMetadata(request.Metadata);
         }
 
         await CheckMandatoryMetadata(sensor);
@@ -39,11 +38,7 @@ public class CreateSensorHandler(ISensorContext _context) : IRequestHandler<Crea
 
     private async Task CheckMandatoryMetadata(Sensor sensor)
     {
-        var mandatoryMetadata = await _context.MandatoryMetadatas
-            .Include(m => m.Metadata)
-            .Where(m => m.SensorType == sensor.Type || m.SensorType == SensorType.Default)
-            .ToListAsync();
-
+        var mandatoryMetadata = await _sensorQueries.GetMandatoryMetadataAsync(sensor);
         sensor.CheckMandatoryMeatadata(mandatoryMetadata);
     }
 }

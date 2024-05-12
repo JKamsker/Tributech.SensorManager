@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
+using Tributech.SensorManager.Domain.Abstractions;
 using Tributech.SensorManager.Domain.ValueTypes;
 
 namespace Tributech.SensorManager.Domain.Entities;
@@ -11,6 +12,21 @@ public class Sensor
     public SensorType? Type { get; set; }
 
     public ICollection<SensorMetadata> Metadata { get; set; } = [];
+
+    public void SetMetadata(IEnumerable<IKeyValuePair<string, string>> metadata)
+    {
+        ArgumentNullException.ThrowIfNull(metadata);
+
+        foreach (var item in metadata)
+        {
+            SetMetadata(item);
+        }
+    }
+
+    public void SetMetadata(IKeyValuePair<string, string> metadata)
+    {
+        SetMetadata(metadata.Key, metadata.Value);
+    }
 
     public void SetMetadata(string key, string value)
     {

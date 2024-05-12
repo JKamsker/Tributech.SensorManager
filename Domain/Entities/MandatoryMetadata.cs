@@ -45,6 +45,22 @@ public class MandatoryMetadata
             AddOrUpdateMetadata(item);
         }
     }
+
+    public void SetMetadata(IEnumerable<MandatoryMetadataItem> metadata)
+    {
+        var keys = metadata.Select(m => m.Key).ToHashSet();
+        var toDelete = Metadata.Where(m => !keys.Contains(m.Key)).ToList();
+
+        foreach (var item in toDelete)
+        {
+            Metadata.Remove(item);
+        }
+
+        foreach (var item in metadata)
+        {
+            AddOrUpdateMetadata(item);
+        }
+    }
 }
 
 public class MandatoryMetadataItem

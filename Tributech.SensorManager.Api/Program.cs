@@ -63,7 +63,7 @@ public class Program
                     .OfType<ApiVersionAttribute>()
                     .SelectMany(attr => attr.Versions);
 
-                return versions.Any(v => $"v{v.ToString()}" == version);
+                return versions.Any(v => $"v{v}" == version);
             });
         });
 
