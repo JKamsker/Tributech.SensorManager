@@ -1,8 +1,7 @@
 ﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
-
-using Tributech.SensorManager.Application.Sensors.Queries.Common;
+using Tributech.SensorManager.Application.Sensors.Common;
 using Tributech.SensorManager.Infrastructure.Data;
 
 namespace Tributech.SensorManager.Application.Sensors.Queries;

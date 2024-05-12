@@ -1,5 +1,5 @@
 using System.Text.Json;
-
+using Tributech.SensorManager.Application.Sensors.Common;
 using Tributech.SensorManager.Application.Sensors.Queries.Common;
 using Tributech.SensorManager.Domain.Entities;
 

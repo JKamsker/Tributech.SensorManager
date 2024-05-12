@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Tributech.SensorManager.Application.Sensors.Common;
 using Tributech.SensorManager.Domain.Entities;
 
 namespace Tributech.SensorManager.Application.Sensors.Queries.Common;

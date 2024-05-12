@@ -2,8 +2,7 @@
 using Microsoft.OpenApi.Models;
 
 using Swashbuckle.AspNetCore.SwaggerGen;
-
-using Tributech.SensorManager.Application.Sensors.Queries.Common;
+using Tributech.SensorManager.Application.Sensors.Common;
 
 namespace Tributech.SensorManager.Api.SchemaFilters;
 

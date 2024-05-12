@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace Tributech.SensorManager.Application.Sensors.Queries.Common;
+namespace Tributech.SensorManager.Application.Sensors.Common;
 
 [DebuggerDisplay("{Key,nq}: {Value,nq}")]
 public class SensorMetadataVm

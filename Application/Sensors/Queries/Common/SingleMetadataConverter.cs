@@ -1,5 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 using System.Text.Json;
+using Tributech.SensorManager.Application.Sensors.Common;
 
 namespace Tributech.SensorManager.Application.Sensors.Queries.Common;
 
