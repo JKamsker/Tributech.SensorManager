@@ -8,6 +8,7 @@ public record SensorType : IValueType<string>
 {
     public string Value { get; }
 
+    public static readonly SensorType Default = new("Default");
     public static readonly SensorType Temperature = new("Temperature");
     public static readonly SensorType Humidity = new("Humidity");
     public static readonly SensorType Altitute = new("Altitute");

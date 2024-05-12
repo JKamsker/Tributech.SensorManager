@@ -9,37 +9,46 @@ namespace Tributech.SensorManager.Api;
 
 public class CustomExceptionHandler : IExceptionHandler
 {
-    private readonly Dictionary<Type, Func<HttpContext, Exception, Task>> _exceptionHandlers;
-
     public CustomExceptionHandler()
     {
-        // Register known exception types and handlers.
-        _exceptionHandlers = new()
-        {
-            { typeof(ValidationException), HandleValidationException },
-            { typeof(NotFoundException), HandleNotFoundException },
-            { typeof(UnauthorizedAccessException), HandleUnauthorizedAccessException },
-            //{ typeof(ForbiddenAccessException), HandleForbiddenAccessException },
-        };
     }
 
     public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
     {
-        var exceptionType = exception.GetType();
-
-        if (_exceptionHandlers.ContainsKey(exceptionType))
+        var handler = exception switch
         {
-            await _exceptionHandlers[exceptionType].Invoke(httpContext, exception);
+            ValidationException valEx => HandleValidationException(httpContext, valEx),
+            NotFoundException notFoundEx => HandleNotFoundException(httpContext, notFoundEx),
+            UnauthorizedAccessException unauthorizedEx => HandleUnauthorizedAccessException(httpContext, unauthorizedEx),
+            System.ComponentModel.DataAnnotations.ValidationException systemValidationEx => HandleSystemValidationException(httpContext, systemValidationEx),
+
+            _ => null
+        };
+
+        if (handler != null)
+        {
+            await handler;
             return true;
         }
 
         return false;
     }
 
-    private async Task HandleValidationException(HttpContext httpContext, Exception ex)
+    private async Task HandleSystemValidationException(HttpContext context, Exception exception)
     {
-        var exception = (ValidationException)ex;
+        context.Response.StatusCode = StatusCodes.Status400BadRequest;
 
+        await context.Response.WriteAsJsonAsync(new ProblemDetails
+        {
+            Status = StatusCodes.Status400BadRequest,
+            Title = "Validation failed",
+            Type = "tag:tributech.io,2024:validation-failed",
+            Detail = exception.Message
+        });
+    }
+
+    private async Task HandleValidationException(HttpContext httpContext, ValidationException exception)
+    {
         httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
 
         var mappedErrors = exception.Errors
@@ -49,14 +58,13 @@ public class CustomExceptionHandler : IExceptionHandler
         await httpContext.Response.WriteAsJsonAsync(new ValidationProblemDetails(mappedErrors)
         {
             Status = StatusCodes.Status400BadRequest,
-            Type = "tag:tributech.io,2024:validation-problem"
+            Title = "Validation failed",
+            Type = "tag:tributech.io,2024:validation-failed"
         });
     }
 
-    private async Task HandleNotFoundException(HttpContext httpContext, Exception ex)
+    private async Task HandleNotFoundException(HttpContext httpContext, NotFoundException ex)
     {
-        var exception = (NotFoundException)ex;
-
         httpContext.Response.StatusCode = StatusCodes.Status404NotFound;
 
         await httpContext.Response.WriteAsJsonAsync(new ProblemDetails()
@@ -64,7 +72,7 @@ public class CustomExceptionHandler : IExceptionHandler
             Status = StatusCodes.Status404NotFound,
             Type = "tag:tributech.io,2024:not-found",
             Title = "The specified resource was not found.",
-            Detail = exception.Message
+            Detail = ex.Message
         });
     }
 

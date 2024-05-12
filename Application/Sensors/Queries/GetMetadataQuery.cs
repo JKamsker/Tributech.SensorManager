@@ -1,8 +1,8 @@
 ﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
 using Tributech.SensorManager.Application.Sensors.Common;
-using Tributech.SensorManager.Infrastructure.Data;
 
 namespace Tributech.SensorManager.Application.Sensors.Queries;
 
@@ -10,9 +10,9 @@ public record GetMetadataQuery(Guid SensorId) : IRequest<List<SensorMetadataVm>>
 
 public class GetMetadataHandler : IRequestHandler<GetMetadataQuery, List<SensorMetadataVm>>
 {
-    private readonly SensorDbContext _context;
+    private readonly ISensorContext _context;
 
-    public GetMetadataHandler(SensorDbContext context)
+    public GetMetadataHandler(ISensorContext context)
     {
         _context = context;
     }

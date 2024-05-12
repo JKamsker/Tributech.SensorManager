@@ -10,8 +10,10 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Tributech.SensorManager.Infrastructure.Data;
+using Tributech.SensorManager.Application.Data;
 
 namespace Tributech.SensorManager.Infrastructure;
+
 public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
@@ -28,8 +30,7 @@ public static class DependencyInjection
 #endif
         });
 
-
-
+        services.AddScoped<ISensorContext>(sp => sp.GetRequiredService<SensorDbContext>());
 
         return services;
     }

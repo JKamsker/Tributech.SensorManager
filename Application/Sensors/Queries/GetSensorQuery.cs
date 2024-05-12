@@ -10,7 +10,6 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Tributech.SensorManager.Domain.Entities;
 
-using Tributech.SensorManager.Infrastructure.Data;
 using System.Diagnostics;
 using Tributech.SensorManager.Application.Sensors.Queries.Common;
 
@@ -23,9 +22,9 @@ public class GetSensorQuery : IRequest<SensorVm>
 
 public class GetSensorHandler : IRequestHandler<GetSensorQuery, SensorVm?>
 {
-    private readonly SensorDbContext _context;
+    private readonly ISensorContext _context;
 
-    public GetSensorHandler(SensorDbContext context)
+    public GetSensorHandler(ISensorContext context)
     {
         _context = context;
     }

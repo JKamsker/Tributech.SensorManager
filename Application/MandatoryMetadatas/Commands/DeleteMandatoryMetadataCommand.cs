@@ -2,8 +2,6 @@
 
 using Microsoft.EntityFrameworkCore;
 
-using Tributech.SensorManager.Infrastructure.Data;
-
 namespace Tributech.SensorManager.Application.MandatoryMetadatas.Commands;
 
 // Delete
@@ -14,9 +12,9 @@ public class DeleteMandatoryMetadataCommand : IRequest
 
 public class DeleteMandatoryMetadataCommandHandler : IRequestHandler<DeleteMandatoryMetadataCommand>
 {
-    private readonly SensorDbContext _context;
+    private readonly ISensorContext _context;
 
-    public DeleteMandatoryMetadataCommandHandler(SensorDbContext context)
+    public DeleteMandatoryMetadataCommandHandler(ISensorContext context)
     {
         _context = context;
     }

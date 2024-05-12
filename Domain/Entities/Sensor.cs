@@ -1,4 +1,6 @@
-﻿using Tributech.SensorManager.Domain.ValueTypes;
+﻿using System.ComponentModel.DataAnnotations;
+
+using Tributech.SensorManager.Domain.ValueTypes;
 
 namespace Tributech.SensorManager.Domain.Entities;
 
@@ -32,6 +34,45 @@ public class Sensor
         if (metadata != null)
         {
             Metadata.Remove(metadata);
+        }
+    }
+
+    public void CheckMandatoryMeatadata(IEnumerable<MandatoryMetadata> items)
+    {
+        var metadataItems = items
+            .Where(m => m.SensorType == Type || m.SensorType == SensorType.Default) // Restrict to the sensor type or default
+            .OrderBy(x => x.SensorType == SensorType.Default ? 1 : 0) // Default has lower precedence
+            .SelectMany(x => x.Metadata)
+            .DistinctBy(x => x.Key);
+
+        CheckMandatoryMeatadata(metadataItems);
+    }
+
+    /// <summary>
+    /// Checks if the mandatory metadata is set for the sensor.
+    /// 1. Metadata is present = all good
+    /// 2. Metadata is not present, but mandatory has default value = set default value
+    /// 3. Metadata is not present, and mandatory has no default value = throw exception
+    /// </summary>
+    /// <param name="collection"></param>
+    /// <exception cref="NotImplementedException"></exception>
+    public void CheckMandatoryMeatadata(IEnumerable<MandatoryMetadataItem> collection)
+    {
+        foreach (var item in collection)
+        {
+            var metadata = Metadata.FirstOrDefault(m => m.Key == item.Key);
+
+            if (metadata != null)
+            {
+                continue;
+            }
+
+            if (item.DefaultValue == null)
+            {
+                throw new ValidationException($"Mandatory metadata '{item.Key}' is not set for sensor '{Name}'");
+            }
+
+            SetMetadata(item.Key, item.DefaultValue);
         }
     }
 }

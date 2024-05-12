@@ -3,7 +3,6 @@
 using Microsoft.EntityFrameworkCore;
 
 using Tributech.SensorManager.Application.Sensors.Queries.Common;
-using Tributech.SensorManager.Infrastructure.Data;
 
 namespace Tributech.SensorManager.Application.Sensors.Queries;
 
@@ -13,9 +12,9 @@ public class GetAllSensorsQuery : IRequest<List<SensorVm>>
 
 public class GetAllSensorsHandler : IRequestHandler<GetAllSensorsQuery, List<SensorVm>>
 {
-    private readonly SensorDbContext _context;
+    private readonly ISensorContext _context;
 
-    public GetAllSensorsHandler(SensorDbContext context)
+    public GetAllSensorsHandler(ISensorContext context)
     {
         _context = context;
     }

@@ -1,14 +1,5 @@
 ﻿using MediatR;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Tributech.SensorManager.Application.Sensors.Common;
-using Tributech.SensorManager.Infrastructure.Data;
-
 namespace Tributech.SensorManager.Application.Sensors.Commands;
 
 public class UpdateSensorCommand : IRequest
@@ -19,9 +10,9 @@ public class UpdateSensorCommand : IRequest
 
 public class UpdateSensorHandler : IRequestHandler<UpdateSensorCommand>
 {
-    private readonly SensorDbContext _context;
+    private readonly ISensorContext _context;
 
-    public UpdateSensorHandler(SensorDbContext context)
+    public UpdateSensorHandler(ISensorContext context)
     {
         _context = context;
     }

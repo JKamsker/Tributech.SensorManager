@@ -6,7 +6,6 @@ using System.Text.Json.Serialization;
 
 using Tributech.SensorManager.Application.MandatoryMetadatas.Common;
 using Tributech.SensorManager.Domain.ValueTypes;
-using Tributech.SensorManager.Infrastructure.Data;
 
 namespace Tributech.SensorManager.Application.MandatoryMetadatas.Commands;
 
@@ -23,9 +22,9 @@ public class UpdateMandatoryMetadataCommand : IRequest
 
 public class UpdateMandatoryMetadataCommandHandler : IRequestHandler<UpdateMandatoryMetadataCommand>
 {
-    private readonly SensorDbContext _context;
+    private readonly ISensorContext _context;
 
-    public UpdateMandatoryMetadataCommandHandler(SensorDbContext context)
+    public UpdateMandatoryMetadataCommandHandler(ISensorContext context)
     {
         _context = context;
     }

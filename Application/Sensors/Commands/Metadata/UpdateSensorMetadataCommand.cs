@@ -6,7 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 using System.Text.Json.Serialization;
 
-using Tributech.SensorManager.Infrastructure.Data;
+using Tributech.SensorManager.Domain.Entities;
+using Tributech.SensorManager.Domain.ValueTypes;
 
 namespace Tributech.SensorManager.Application.Sensors.Commands.Metadata;
 
@@ -19,15 +20,17 @@ public record UpdateSensorMetadataCommand
 
 public class UpdateSensorMetadataHandler : IRequestHandler<UpdateSensorMetadataCommand>
 {
-    private readonly SensorDbContext _context;
+    private readonly ISensorContext _context;
 
-    public UpdateSensorMetadataHandler(SensorDbContext context)
+    public UpdateSensorMetadataHandler(ISensorContext context)
     {
         _context = context;
     }
 
-    public Task Handle(UpdateSensorMetadataCommand request, CancellationToken cancellationToken)
+    public async Task Handle(UpdateSensorMetadataCommand request, CancellationToken cancellationToken)
     {
+        _ = request.Key ?? throw new ArgumentNullException(nameof(request.Key));
+
         var sensor = _context.Sensors
             .Include(s => s.Metadata)
             .FirstOrDefault(s => s.Id == request.SensorId);
@@ -39,7 +42,19 @@ public class UpdateSensorMetadataHandler : IRequestHandler<UpdateSensorMetadataC
 
         sensor.SetMetadata(request.Key, request.Value);
 
-        return _context.SaveChangesAsync(cancellationToken);
+        await CheckMandatoryMetadata(sensor);
+
+        await _context.SaveChangesAsync(cancellationToken);
+    }
+
+    private async Task CheckMandatoryMetadata(Sensor sensor)
+    {
+        var mandatoryMetadata = await _context.MandatoryMetadatas
+            .Include(m => m.Metadata)
+            .Where(m => m.SensorType == sensor.Type || m.SensorType == SensorType.Default)
+            .ToListAsync();
+
+        sensor.CheckMandatoryMeatadata(mandatoryMetadata);
     }
 }
 

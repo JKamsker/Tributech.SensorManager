@@ -1,4 +1,7 @@
-﻿using Tributech.SensorManager.Domain.ValueTypes;
+﻿using System.Collections;
+
+using Tributech.SensorManager.Domain.Helpers;
+using Tributech.SensorManager.Domain.ValueTypes;
 
 namespace Tributech.SensorManager.Domain.Entities;
 

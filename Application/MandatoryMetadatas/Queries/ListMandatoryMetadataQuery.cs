@@ -3,7 +3,6 @@
 using Microsoft.EntityFrameworkCore;
 
 using Tributech.SensorManager.Application.MandatoryMetadatas.Common;
-using Tributech.SensorManager.Infrastructure.Data;
 
 namespace Tributech.SensorManager.Application.MandatoryMetadatas.Queries;
 
@@ -14,9 +13,9 @@ public class ListMandatoryMetadataQuery : IRequest<IEnumerable<MandatoryMetadata
 
 public class ListMandatoryMetadataQueryHandler : IRequestHandler<ListMandatoryMetadataQuery, IEnumerable<MandatoryMetadataVm>>
 {
-    private readonly SensorDbContext _context;
+    private readonly ISensorContext _context;
 
-    public ListMandatoryMetadataQueryHandler(SensorDbContext context)
+    public ListMandatoryMetadataQueryHandler(ISensorContext context)
     {
         _context = context;
     }

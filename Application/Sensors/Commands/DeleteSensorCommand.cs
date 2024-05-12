@@ -6,8 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Tributech.SensorManager.Infrastructure.Data;
-
 namespace Tributech.SensorManager.Application.Sensors.Commands;
 
 public class DeleteSensorCommand : IRequest
@@ -17,9 +15,9 @@ public class DeleteSensorCommand : IRequest
 
 public class DeleteSensorHandler : IRequestHandler<DeleteSensorCommand>
 {
-    private readonly SensorDbContext _context;
+    private readonly ISensorContext _context;
 
-    public DeleteSensorHandler(SensorDbContext context)
+    public DeleteSensorHandler(ISensorContext context)
     {
         _context = context;
     }

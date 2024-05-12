@@ -11,8 +11,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text.Json;
-
-using Tributech.SensorManager.Application;
+using Tributech.SensorManager.Application.Extensions;
 using Tributech.SensorManager.Domain.Extensions;
 
 namespace Tributech.SensorManager.Api;

@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Tributech.SensorManager.Application.MandatoryMetadatas.Common;
 using Tributech.SensorManager.Domain.Entities;
 using Tributech.SensorManager.Domain.ValueTypes;
-using Tributech.SensorManager.Infrastructure.Data;
 
 namespace Tributech.SensorManager.Application.MandatoryMetadatas.Commands;
 
@@ -17,9 +16,9 @@ public class CreateMandatoryMetadataCommand : IRequest
 
 public class CreateMandatoryMetadataCommandHandler : IRequestHandler<CreateMandatoryMetadataCommand>
 {
-    private readonly SensorDbContext _context;
+    private readonly ISensorContext _context;
 
-    public CreateMandatoryMetadataCommandHandler(SensorDbContext context)
+    public CreateMandatoryMetadataCommandHandler(ISensorContext context)
     {
         _context = context;
     }

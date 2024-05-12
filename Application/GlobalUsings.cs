@@ -1,0 +1,1 @@
+﻿global using Tributech.SensorManager.Application.Data;

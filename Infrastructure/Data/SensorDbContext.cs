@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
+using Tributech.SensorManager.Application.Data;
 using Tributech.SensorManager.Domain.Entities;
 using Tributech.SensorManager.Infrastructure.Data.Extensions;
 
@@ -16,10 +17,15 @@ namespace Tributech.SensorManager.Infrastructure.Data;
 
  */
 
-public class SensorDbContext(DbContextOptions options) : DbContext(options)
+public class SensorDbContext(DbContextOptions options) : DbContext(options), ISensorContext
 {
     public DbSet<Sensor> Sensors { get; set; }
     public DbSet<MandatoryMetadata> MandatoryMetadatas { get; set; }
+
+    public async Task SaveChangesAsync(CancellationToken token)
+    {
+        await SaveChangesAsync(token);
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
