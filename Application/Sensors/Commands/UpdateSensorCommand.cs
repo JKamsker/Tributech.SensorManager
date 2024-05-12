@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Tributech.SensorManager.Application.Sensors.Common;
 using Tributech.SensorManager.Infrastructure.Data;
 
 namespace Tributech.SensorManager.Application.Sensors.Commands;
@@ -31,6 +32,7 @@ public class UpdateSensorHandler : IRequestHandler<UpdateSensorCommand>
         if (sensor == null) throw new InvalidOperationException("Sensor not found");
 
         sensor.Name = request.Name;
+
         await _context.SaveChangesAsync(cancellationToken);
     }
 }
