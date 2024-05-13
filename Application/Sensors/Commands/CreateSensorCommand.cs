@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-using Tributech.SensorManager.Application.Queries;
+using Tributech.SensorManager.Application.Sensors.Commands.Common;
 using Tributech.SensorManager.Application.Sensors.Common;
 using Tributech.SensorManager.Application.Sensors.Queries.Common;
 using Tributech.SensorManager.Domain.Entities;
@@ -15,7 +15,7 @@ public class CreateSensorCommand : IRequest<SensorVm>
     public IEnumerable<SensorMetadataVm>? Metadata { get; set; }
 }
 
-public class CreateSensorHandler(ISensorContext _context, ISensorQueries _sensorQueries) : IRequestHandler<CreateSensorCommand, SensorVm>
+public class CreateSensorHandler(ISensorContext _context) : IRequestHandler<CreateSensorCommand, SensorVm>
 {
     public async Task<SensorVm> Handle(CreateSensorCommand request, CancellationToken cancellationToken)
     {
@@ -39,7 +39,7 @@ public class CreateSensorHandler(ISensorContext _context, ISensorQueries _sensor
 
     private async Task CheckMandatoryMetadata(Sensor sensor)
     {
-        var mandatoryMetadata = await _sensorQueries.GetMandatoryMetadataAsync(sensor);
+        var mandatoryMetadata = await _context.MandatoryMetadatas.GetMandatoryMetadataAsync(sensor);
         sensor.CheckMandatoryMeatadata(mandatoryMetadata);
     }
 }

@@ -6,8 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 using System.Text.Json.Serialization;
 
+using Tributech.SensorManager.Application.Sensors.Commands.Common;
 using Tributech.SensorManager.Domain.Entities;
-using Tributech.SensorManager.Domain.ValueObjects;
 
 namespace Tributech.SensorManager.Application.Sensors.Commands.Metadata;
 
@@ -49,11 +49,7 @@ public class UpdateSensorMetadataHandler : IRequestHandler<UpdateSensorMetadataC
 
     private async Task CheckMandatoryMetadata(Sensor sensor)
     {
-        var mandatoryMetadata = await _context.MandatoryMetadatas
-            .Include(m => m.Metadata)
-            .Where(m => m.SensorType == sensor.Type || m.SensorType == SensorType.Default)
-            .ToListAsync();
-
+        var mandatoryMetadata = await _context.MandatoryMetadatas.GetMandatoryMetadataAsync(sensor);
         sensor.CheckMandatoryMeatadata(mandatoryMetadata);
     }
 }

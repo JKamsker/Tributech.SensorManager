@@ -11,8 +11,6 @@ using System.Threading.Tasks;
 
 using Tributech.SensorManager.Infrastructure.Data;
 using Tributech.SensorManager.Application.Data;
-using Tributech.SensorManager.Application.Queries;
-using Tributech.SensorManager.Infrastructure.Queries;
 
 namespace Tributech.SensorManager.Infrastructure;
 
@@ -34,7 +32,6 @@ public static class DependencyInjection
 
         services.AddScoped<ISensorContext>(sp => sp.GetRequiredService<SensorDbContext>());
 
-        services.AddScoped<ISensorQueries, SensorQueries>();
         return services;
     }
 }
