@@ -76,6 +76,6 @@ public class SensorsController : ControllerBase
     public async Task<IActionResult> GetSensorValues(string sensorId, [FromQuery] string from, [FromQuery] string to)
     {
         var command = new SensorValuesRequest { SensorId = sensorId, From = from, To = to };
-        return Ok(await _mediator.Send(command));
+        return Ok((await _mediator.Send(command))?.SensorValues);
     }
 }

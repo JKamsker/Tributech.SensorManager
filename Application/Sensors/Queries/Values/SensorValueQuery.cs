@@ -1,5 +1,7 @@
 ﻿using MediatR;
 
+using System.Collections.Generic;
+
 using Tributech.SensorManager.Library.External.TestPlatform;
 
 namespace Tributech.SensorManager.Application.Sensors.Queries.Values;
@@ -12,20 +14,30 @@ public class SensorValuesRequest : IRequest<SensorValuesResponse>
 }
 
 // response
-public class SensorValuesResponse
+public class SensorValuesResponseVm
 {
     public string StreamId { get; set; }
     public string Timestamp { get; set; }
     public string StoredAt { get; set; }
     public int Value { get; set; }
 
-    public SensorValuesResponse(Tributech.SensorManager.Library.External.TestPlatform.SensorValuesResponse sensorValuesResponse)
+    public SensorValuesResponseVm(Library.External.TestPlatform.Models.SensorValuesResponse sensorValuesResponse)
     {
         StreamId = sensorValuesResponse.StreamId;
         Timestamp = sensorValuesResponse.Timestamp;
         StoredAt = sensorValuesResponse.StoredAt;
         Value = sensorValuesResponse.Value;
     }
+}
+
+public class SensorValuesResponse
+{
+    public SensorValuesResponse(IAsyncEnumerable<Library.External.TestPlatform.Models.SensorValuesResponse> sensorValuesResponse)
+    {
+        SensorValues = sensorValuesResponse.Select(sensorValuesResponse => new SensorValuesResponseVm(sensorValuesResponse));
+    }
+
+    public IAsyncEnumerable<SensorValuesResponseVm> SensorValues { get; set; }
 }
 
 public class SensorValuesHandler : IRequestHandler<SensorValuesRequest, SensorValuesResponse>
@@ -39,7 +51,7 @@ public class SensorValuesHandler : IRequestHandler<SensorValuesRequest, SensorVa
 
     public async Task<SensorValuesResponse> Handle(SensorValuesRequest request, CancellationToken cancellationToken)
     {
-        var result = await _testPlatformClient.GetSensorValuesAsync(request.SensorId, request.From, request.To);
+        var result = _testPlatformClient.GetSensorValuesAsync(request.SensorId, request.From, request.To);
         return new SensorValuesResponse(result);
     }
 }
