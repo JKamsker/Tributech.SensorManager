@@ -30,6 +30,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Application\Application.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
+    <ProjectReference Include="..\Tributech.SensorManager.Library.External.TestPlatform\External.TestPlatform.csproj" />
   </ItemGroup>
 
 </Project>

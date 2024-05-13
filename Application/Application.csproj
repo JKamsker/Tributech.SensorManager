@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj" />
+    <ProjectReference Include="..\Tributech.SensorManager.Library.External.TestPlatform\External.TestPlatform.csproj" />
     <!--<ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />-->
   </ItemGroup>
 

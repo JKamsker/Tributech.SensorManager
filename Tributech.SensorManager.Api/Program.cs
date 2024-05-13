@@ -2,21 +2,18 @@ using Asp.Versioning;
 
 using FluentValidation;
 
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 using System.Globalization;
-using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
-using System.Text.Json;
 
 using Tributech.SensorManager.Api.SchemaFilters;
 using Tributech.SensorManager.Application;
 using Tributech.SensorManager.Application.Behavior;
 using Tributech.SensorManager.Infrastructure;
+using Tributech.SensorManager.Library.External.TestPlatform;
 
 namespace Tributech.SensorManager.Api;
 
@@ -81,6 +78,26 @@ public class Program
 
         builder.Services.AddKeycloakAuthentication(builder.Configuration);
 
+        builder.Services.AddResponseCaching(options =>
+        {
+            options.MaximumBodySize = 10 * 1024;
+            options.UseCaseSensitivePaths = true;
+        });
+
+        builder.Services.AddOutputCache(options =>
+        {
+            options.AddBasePolicy(builder => builder
+                .Expire(TimeSpan.FromSeconds(5))
+                .Cache()
+            );
+            options.AddPolicy("Expire20", builder =>
+                builder.Expire(TimeSpan.FromSeconds(200)));
+            options.AddPolicy("Expire30", builder =>
+                builder.Expire(TimeSpan.FromSeconds(300)));
+        });
+
+        builder.Services.AddTestPlatformClient(builder.Configuration);
+
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -95,6 +112,9 @@ public class Program
         app.UseHttpsRedirection();
 
         app.UseKeycloakAuth();
+
+        app.UseResponseCaching();
+        app.UseOutputCache();
 
         app.MapControllers();
 

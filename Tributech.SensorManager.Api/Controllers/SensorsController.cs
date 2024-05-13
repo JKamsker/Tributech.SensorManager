@@ -4,10 +4,14 @@ using MediatR;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
+
+using System.Net.Http;
 
 using Tributech.SensorManager.Application.Sensors.Commands;
 using Tributech.SensorManager.Application.Sensors.Queries;
 using Tributech.SensorManager.Application.Sensors.Queries.Common;
+using Tributech.SensorManager.Application.Sensors.Queries.Values;
 using Tributech.SensorManager.Domain.Entities;
 
 namespace Tributech.SensorManager.Api.Controllers;
@@ -27,7 +31,7 @@ public class SensorsController : ControllerBase
     // admin@tributech.io
 
     [HttpGet]
-    [Authorize]
+    [OutputCache]
     public async Task<ActionResult<List<SensorVm>>> GetAll()
     {
         return Ok(await _mediator.Send(new GetAllSensorsQuery()));
@@ -55,6 +59,7 @@ public class SensorsController : ControllerBase
         {
             return BadRequest("ID mismatch");
         }
+
         await _mediator.Send(command);
         return NoContent();
     }
@@ -65,5 +70,12 @@ public class SensorsController : ControllerBase
     {
         await _mediator.Send(new DeleteSensorCommand { Id = id });
         return NoContent();
+    }
+
+    [HttpGet("{sensorId}/values")]
+    public async Task<IActionResult> GetSensorValues(string sensorId, [FromQuery] string from, [FromQuery] string to)
+    {
+        var command = new SensorValuesRequest { SensorId = sensorId, From = from, To = to };
+        return Ok(await _mediator.Send(command));
     }
 }

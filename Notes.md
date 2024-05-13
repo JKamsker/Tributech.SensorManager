@@ -45,3 +45,30 @@ response will be like this
 }
 ```
 Copy the access_token and use it in the Authorization header in your requests to the API.
+
+The public key comes from ``http://localhost:8085/realms/customer``
+
+# Caching
+
+```
+- Think about which kind of request / operation would be optimal for caching
+  - Note your thoughts in your concept
+  - Also note down what kind of downsides the caching will introduce onto our layer
+- Implement either an external key value cache or use a Microsoft provided solution
+```
+
+First of all, caching adds an extra layer of complexity to the application. 
+I personally prefer not to use caching unless it is really necessary. 
+The reason is that caching requires the programmer to think about the cache and the cache invalidation strategy.
+
+I would use a cache-asides strategy, meaning:
+- When a request comes in, I would first check the cache for the data
+- If the data is in the cache, I would return the data from the cache, given that the expiration time has not passed (usually automatically handled by the cache implementation)
+- If the data is not in the cache, or the data is expired, I would fetch the data from the datasource and put it in the cache (putting the data into the cache can be done asynchronously f&f)
+
+Pros and Cons of using In-Memory vs. External Cache:
+In-memory cache is faster, easier to implement, and does not require any additional setup.
+In-memory cache also scales okay but has the downside, that each request will most likely hit different servers, meaning caching is not as effective as it could be. 
+External cache is slower, requires additional setup, but scales better and is more effective in a distributed environment.
+
+**TL;DR**: Scale alot? Use external cache. Scale no to little? Use in-memory cache.

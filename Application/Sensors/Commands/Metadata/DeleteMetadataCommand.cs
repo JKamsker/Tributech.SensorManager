@@ -2,7 +2,7 @@
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Tributech.SensorManager.Application.Sensors.Queries;
+namespace Tributech.SensorManager.Application.Sensors.Commands.Metadata;
 
 // DeleteMetadataCommand
 public record DeleteMetadataCommand(Guid SensorId, string Key) : IRequest;
