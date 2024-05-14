@@ -84,3 +84,4 @@ Implementations:
 ``MemoryCache`` and ``IDistributedCache`` are the most common ways to cache data in .NET Core. 
 They are used in a similar way to ``Dictionary`` or much rather ``ConcurrentDictionary``.
 I believe the ``MemoryCache`` is just a Dictionary with some additional features like expiration time and cache invalidation.
+

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -8,19 +8,21 @@
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
 
-	  <RootNamespace>Tributech.SensorManager.Domain.Tests</RootNamespace>
-	  <AssemblyName>Tributech.SensorManager.Domain.Tests</AssemblyName>
+	  <RootNamespace>Tributech.SensorManager.IntegrationTests</RootNamespace>
+	  <AssemblyName>Tributech.SensorManager.IntegrationTests</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
     <PackageReference Include="xunit" Version="2.5.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Domain\Domain.csproj" />
+    <ProjectReference Include="..\..\SensorManager\Api\Api.csproj" />
   </ItemGroup>
 
   <ItemGroup>
