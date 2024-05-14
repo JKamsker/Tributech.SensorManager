@@ -56,37 +56,7 @@ public class Program
             .AddControllers()
             .ConfigureJsonOptions();
 
-        services.AddApiVersioning(options =>
-        {
-            options.AssumeDefaultVersionWhenUnspecified = true;
-            options.DefaultApiVersion = new ApiVersion(1); // Default to version 1.0
-            options.ReportApiVersions = true;
-        }).AddApiExplorer(o =>
-        {
-            o.GroupNameFormat = "'v'VVV";
-            o.SubstituteApiVersionInUrl = true;
-        });
-
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-        services.AddEndpointsApiExplorer();
-        services.AddSwaggerGen(c =>
-        {
-            c.SchemaFilter<SensorTypeSchemaFilter>();
-            c.SchemaFilter<SensorMetadataVmSchemaFilter>();
-
-            c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
-            c.DocInclusionPredicate((version, apiDesc) =>
-            {
-                if (!apiDesc.TryGetMethodInfo(out MethodInfo methodInfo)) return false;
-
-                var versions = methodInfo.DeclaringType
-                    .GetCustomAttributes(true)
-                    .OfType<ApiVersionAttribute>()
-                    .SelectMany(attr => attr.Versions);
-
-                return versions.Any(v => $"v{v}" == version);
-            });
-        });
+        services.AddOpenApiIntegration();
 
         services.AddInfrastructureServices(configuration);
         services.AddMediatR(builder =>
