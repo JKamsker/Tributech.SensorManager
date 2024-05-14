@@ -15,16 +15,13 @@ using Tributech.SensorManager.Application.MandatoryMetadatas.Queries;
 [ApiController]
 [ApiVersion("1")]
 [Route("api/v{version:apiVersion}/sensors/metadata/mandatory")]
-public class MandatoryMetadataController : ControllerBase
+public class MandatoryMetadataController(IMediator _mediator) : ControllerBase
 {
-    private readonly IMediator _mediator;
-
-    public MandatoryMetadataController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-
-    // get by type
+    /// <summary>
+    /// Get mandatory metadata by sensor type
+    /// </summary>
+    /// <param name="sensorType">The type of the sensor</param>
+    /// <returns></returns>
     [HttpGet("{sensorType}")]
     public async Task<IActionResult> GetByType(string sensorType)
     {
@@ -38,7 +35,10 @@ public class MandatoryMetadataController : ControllerBase
         return Ok(result);
     }
 
-    // list all
+    /// <summary>
+    /// Get all mandatory metadata
+    /// </summary>
+    /// <returns>All mandatory metadata</returns>
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
