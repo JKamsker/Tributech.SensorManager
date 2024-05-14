@@ -13,28 +13,24 @@ Tributech.SensorManager is a robust API designed for managing sensors and their 
 ## Endpoints
 
 ### SensorController
-- **GET /sensors/{id}/values**
-  - Retrieves live values of a specific sensor.
-- **GET /sensors**
-  - Retrieves a list of all sensors.
-- **GET /sensors/{id}**
-  - Retrieves details of a specific sensor.
-- **POST /sensors**
-  - Adds a new sensor.
-- **PUT /sensors/{id}**
-  - Updates an existing sensor.
-- **DELETE /sensors/{id}**
-  - Deletes a sensor.
+
+| Method | Endpoint                  | Description                    |
+|--------|---------------------------|--------------------------------|
+| GET    | /sensors/{id}/values      | Retrieves live values of a specific sensor. |
+| GET    | /sensors                  | Retrieves a list of all sensors. |
+| GET    | /sensors/{id}             | Retrieves details of a specific sensor. |
+| POST   | /sensors                  | Adds a new sensor. |
+| PUT    | /sensors/{id}             | Updates an existing sensor. |
+| DELETE | /sensors/{id}             | Deletes a sensor. |
 
 ### SensorMetadataController
-- **GET /sensors/{sensorId}/metadata**
-  - Retrieves metadata for a specific sensor.
-- **POST /sensors/{sensorId}/metadata**
-  - Adds metadata to a sensor.
-- **PUT /sensors/{sensorId}/metadata/{id}**
-  - Updates existing metadata.
-- **DELETE /sensors/{sensorId}/metadata/{id}**
-  - Deletes metadata.
+
+| Method | Endpoint                           | Description                    |
+|--------|------------------------------------|--------------------------------|
+| GET    | /sensors/{sensorId}/metadata       | Retrieves metadata for a specific sensor. |
+| POST   | /sensors/{sensorId}/metadata       | Adds metadata to a sensor. |
+| PUT    | /sensors/{sensorId}/metadata/{id}  | Updates existing metadata. |
+| DELETE | /sensors/{sensorId}/metadata/{id}  | Deletes metadata. |
 
 ## Technologies
 - **Framework**: ASP.NET Core (.NET 8)
