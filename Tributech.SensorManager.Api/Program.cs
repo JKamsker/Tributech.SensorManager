@@ -45,9 +45,6 @@ public class Program
 
         app.UseKeycloakAuth();
 
-        app.UseResponseCaching();
-        app.UseOutputCache();
-
         app.MapControllers();
 
         app.Run();
