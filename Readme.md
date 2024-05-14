@@ -62,6 +62,16 @@ Ensure that you have a local instance of SQL Server running. Update the connecti
    dotnet run
    ```
 
+
+## Making authorized requests
+Keycloak is used for role-based authorization. To obtain a JWT token from Keycloak, use the following command:
+```bash	
+curl -d 'client_id=customer-api' -d 'username=admin@tributech.io' -d 'password=changeme' -d 'grant_type=password' 'http://localhost:8085/realms/customer/protocol/openid-connect/token'
+```
+
+For instructions, how to configure keycloak, see [Keycloak Configuration](docs/Notes.md#setup-keycloak).
+
+
 ## License
 This project is licensed under the MIT License.
 
