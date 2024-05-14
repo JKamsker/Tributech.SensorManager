@@ -2,7 +2,7 @@
 
 namespace Tributech.SensorManager.Library.External.TestPlatform;
 
-public class StaticTestPlatformClient : ITestPlatformClient
+internal class StaticTestPlatformClient : ITestPlatformClient
 {
     public IAsyncEnumerable<SensorValuesResponse> GetSensorValuesAsync(string sensorId, string from, string to)
     {

@@ -23,11 +23,12 @@ public static class DependencyInjection
         {
             options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
 
-#if (UseSQLite)
-            options.UseSqlite(connectionString);
-#else
+            if (configuration.GetValue<bool>("UseInMemoryDatabase"))
+            {
+                options.UseInMemoryDatabase(Guid.NewGuid().ToString());
+                return;
+            }
             options.UseSqlServer(connectionString);
-#endif
         });
 
         services.AddScoped<ISensorContext>(sp => sp.GetRequiredService<SensorDbContext>());

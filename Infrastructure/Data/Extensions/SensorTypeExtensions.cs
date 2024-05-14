@@ -24,7 +24,7 @@ internal static class SensorTypeExtensions
     }
 
     // IsDataType
-    public static PropertyBuilder<Domain.ValueObjects.ValueType> IsDataType(this PropertyBuilder<Domain.ValueObjects.ValueType> propertyBuilder)
+    public static PropertyBuilder<Domain.ValueObjects.FieldType> IsDataType(this PropertyBuilder<Domain.ValueObjects.FieldType> propertyBuilder)
     {
         return propertyBuilder.HasConversion<string>(new DataTypeConverter(), new DataTypeComparer());
     }

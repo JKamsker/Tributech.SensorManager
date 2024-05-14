@@ -24,7 +24,7 @@ public class SensorDbContext(DbContextOptions options) : DbContext(options), ISe
 
     public async Task SaveChangesAsync(CancellationToken token)
     {
-        await SaveChangesAsync(token);
+        await base.SaveChangesAsync(token);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -87,7 +87,7 @@ public class SensorDbContext(DbContextOptions options) : DbContext(options), ISe
                 md.Property(m => m.Type)
                     .IsDataType()
                     .IsRequired()
-                    .HasDefaultValue(Domain.ValueObjects.ValueType.None)
+                    .HasDefaultValue(Domain.ValueObjects.FieldType.None)
                     .HasMaxLength(64);
 
                 md.Property(m => m.DefaultValue)

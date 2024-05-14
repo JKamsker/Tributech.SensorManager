@@ -1,24 +1,25 @@
 ﻿namespace Tributech.SensorManager.Domain.ValueObjects;
 
 // DataType: int, bool, double, datetime, hex
-public record ValueType : IValueType<string>
+public record FieldType : IValueType<string>
 {
     public string Value { get; }
 
     // null
-    public static readonly ValueType None = new("none");
-    public static readonly ValueType Int = new("int");
-    public static readonly ValueType Bool = new("bool");
-    public static readonly ValueType Double = new("double");
-    public static readonly ValueType DateTime = new("datetime");
-    public static readonly ValueType Hex = new("hex");
+    public static readonly FieldType None = new("none");
+    public static readonly FieldType Int = new("int");
+    public static readonly FieldType Bool = new("bool");
+    public static readonly FieldType Double = new("double");
+    public static readonly FieldType DateTime = new("datetime");
+    public static readonly FieldType Hex = new("hex");
+    public static readonly FieldType String = new("string");
 
-    public ValueType(string value)
+    public FieldType(string value)
     {
         Value = value;
     }
 
-    private ValueType()
+    private FieldType()
     {
     }
 
@@ -44,15 +45,19 @@ public record ValueType : IValueType<string>
         {
             return value.Length % 2 == 0 && value.All(c => "0123456789ABCDEF".Contains(c, StringComparison.OrdinalIgnoreCase));
         }
+        else if (this == String)
+        {
+            return true;
+        }
         else
         {
             return null;
         }
     }
 
-    private static readonly ValueTypeMap<ValueType> _mapping = [Int, Bool, Double, DateTime, Hex];
+    private static readonly ValueTypeMap<FieldType> _mapping = [None, Int, Bool, Double, DateTime, Hex];
 
-    public static ValueType Parse(string value)
+    public static FieldType Parse(string value)
     {
         // compare without case sensitivity
         if (_mapping.TryGetValue(value, out var dataType))
@@ -60,21 +65,21 @@ public record ValueType : IValueType<string>
             return dataType;
         }
 
-        return _mapping.AddThreadSafe(value, new ValueType(value));
+        return _mapping.AddThreadSafe(value, new FieldType(value));
     }
 
-    public static implicit operator (string Key, ValueType Value)(ValueType dataType)
+    public static implicit operator (string Key, FieldType Value)(FieldType dataType)
     {
         return (dataType.Value, dataType);
     }
 
     // implicit from string
-    public static implicit operator ValueType(string value)
+    public static implicit operator FieldType(string value)
     {
         return Parse(value);
     }
 
-    public static implicit operator string(ValueType dataType)
+    public static implicit operator string(FieldType dataType)
     {
         return dataType.Value;
     }

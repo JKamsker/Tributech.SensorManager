@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿using FluentValidation;
+
+using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -33,5 +35,14 @@ public class DeleteMandatoryMetadataCommandHandler : IRequestHandler<DeleteManda
         _context.MandatoryMetadatas.Remove(entity);
 
         await _context.SaveChangesAsync(cancellationToken);
+    }
+}
+
+// FluentValidation: Id cannot be empty
+public class DeleteMandatoryMetadataCommandValidator : AbstractValidator<DeleteMandatoryMetadataCommand>
+{
+    public DeleteMandatoryMetadataCommandValidator()
+    {
+        RuleFor(x => x.Id).NotEmpty();
     }
 }

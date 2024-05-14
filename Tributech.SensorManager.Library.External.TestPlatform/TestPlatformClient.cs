@@ -1,17 +1,11 @@
 ﻿using System.Net.Http.Json;
+
 using Tributech.SensorManager.Library.External.TestPlatform.Models;
 
 namespace Tributech.SensorManager.Library.External.TestPlatform;
 
-public class TestPlatformClient : ITestPlatformClient
+internal class TestPlatformClient(HttpClient _httpClient) : ITestPlatformClient
 {
-    private readonly HttpClient _httpClient;
-
-    public TestPlatformClient(HttpClient httpClient)
-    {
-        _httpClient = httpClient;
-    }
-
     public async IAsyncEnumerable<SensorValuesResponse> GetSensorValuesAsync(string sensorId, string from, string to)
     {
         var url = $"/values/double?StreamId={sensorId}&From={from}&To={to}";

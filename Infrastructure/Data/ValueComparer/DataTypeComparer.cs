@@ -3,7 +3,7 @@
 namespace Tributech.SensorManager.Infrastructure.Data.ValueComparer;
 
 // DataType
-public class DataTypeComparer : ValueComparer<Domain.ValueObjects.ValueType>
+public class DataTypeComparer : ValueComparer<Domain.ValueObjects.FieldType>
 {
     public DataTypeComparer() : base
     (

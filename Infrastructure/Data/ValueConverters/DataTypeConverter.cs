@@ -3,12 +3,12 @@
 namespace Tributech.SensorManager.Infrastructure.Data.ValueConverters;
 
 // DataType
-public class DataTypeConverter : ValueConverter<Domain.ValueObjects.ValueType, string>
+public class DataTypeConverter : ValueConverter<Domain.ValueObjects.FieldType, string>
 {
     public DataTypeConverter(ConverterMappingHints mappingHints = null) : base
     (
         v => v.Value,
-        v => Domain.ValueObjects.ValueType.Parse(v),
+        v => Domain.ValueObjects.FieldType.Parse(v),
         mappingHints
     )
     {

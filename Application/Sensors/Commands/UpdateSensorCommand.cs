@@ -1,14 +1,16 @@
 ﻿using MediatR;
 
+using Tributech.SensorManager.Application.Sensors.Queries.Common;
+
 namespace Tributech.SensorManager.Application.Sensors.Commands;
 
-public class UpdateSensorCommand : IRequest
+public class UpdateSensorCommand : IRequest<SensorVm>
 {
     public Guid Id { get; set; }
     public string Name { get; set; }
 }
 
-public class UpdateSensorHandler : IRequestHandler<UpdateSensorCommand>
+public class UpdateSensorHandler : IRequestHandler<UpdateSensorCommand, SensorVm>
 {
     private readonly ISensorContext _context;
 
@@ -17,7 +19,7 @@ public class UpdateSensorHandler : IRequestHandler<UpdateSensorCommand>
         _context = context;
     }
 
-    public async Task Handle(UpdateSensorCommand request, CancellationToken cancellationToken)
+    public async Task<SensorVm> Handle(UpdateSensorCommand request, CancellationToken cancellationToken)
     {
         var sensor = await _context.Sensors.FindAsync(new object[] { request.Id }, cancellationToken);
         if (sensor == null) throw new InvalidOperationException("Sensor not found");
@@ -25,5 +27,7 @@ public class UpdateSensorHandler : IRequestHandler<UpdateSensorCommand>
         sensor.Name = request.Name;
 
         await _context.SaveChangesAsync(cancellationToken);
+
+        return new SensorVm(sensor);
     }
 }

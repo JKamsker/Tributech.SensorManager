@@ -8,13 +8,13 @@ using Tributech.SensorManager.Domain.ValueObjects;
 
 namespace Tributech.SensorManager.Application.MandatoryMetadatas.Commands;
 
-public class CreateMandatoryMetadataCommand : IRequest
+public class CreateMandatoryMetadataCommand : IRequest<MandatoryMetadataVm>
 {
     public SensorType SensorType { get; set; }
     public ICollection<MandatoryMetadataItemVm> Metadata { get; set; } = [];
 }
 
-public class CreateMandatoryMetadataCommandHandler : IRequestHandler<CreateMandatoryMetadataCommand>
+public class CreateMandatoryMetadataCommandHandler : IRequestHandler<CreateMandatoryMetadataCommand, MandatoryMetadataVm>
 {
     private readonly ISensorContext _context;
 
@@ -23,7 +23,7 @@ public class CreateMandatoryMetadataCommandHandler : IRequestHandler<CreateManda
         _context = context;
     }
 
-    public async Task Handle(CreateMandatoryMetadataCommand request, CancellationToken cancellationToken)
+    public async Task<MandatoryMetadataVm> Handle(CreateMandatoryMetadataCommand request, CancellationToken cancellationToken)
     {
         // Assert: SensorType is unique
         if (await _context.MandatoryMetadatas.AnyAsync(m => m.SensorType == request.SensorType, cancellationToken: cancellationToken))
@@ -37,5 +37,7 @@ public class CreateMandatoryMetadataCommandHandler : IRequestHandler<CreateManda
         _context.MandatoryMetadatas.Add(entity);
 
         await _context.SaveChangesAsync(cancellationToken);
+
+        return new MandatoryMetadataVm(entity);
     }
 }

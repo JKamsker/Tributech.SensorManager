@@ -13,7 +13,7 @@ namespace Tributech.SensorManager.Application.Behavior;
 
 public sealed class ValidationBehavior<TRequest, TResponse>
     : IPipelineBehavior<TRequest, TResponse>
-    where TRequest : IRequest
+//where TRequest : IRequest
 {
     private readonly IEnumerable<IValidator<TRequest>> _validators;
 

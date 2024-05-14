@@ -57,7 +57,7 @@ public class SensorTests
         };
         var mandatoryMetadataItems = new List<MandatoryMetadataItem>
         {
-            new MandatoryMetadataItem { Key = "mandatoryKey", Type = ValueObjects.ValueType.Int }
+            new MandatoryMetadataItem { Key = "mandatoryKey", Type = ValueObjects.FieldType.Int }
         };
 
         // Act & Assert
@@ -79,7 +79,7 @@ public class SensorTests
         };
         var mandatoryMetadataItems = new List<MandatoryMetadataItem>
         {
-            new MandatoryMetadataItem { Key = "mandatoryKey", Type = ValueObjects.ValueType.Int }
+            new MandatoryMetadataItem { Key = "mandatoryKey", Type = ValueObjects.FieldType.Int }
         };
 
         // Act & Assert
