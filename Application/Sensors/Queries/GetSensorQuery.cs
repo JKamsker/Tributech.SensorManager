@@ -12,6 +12,8 @@ using Tributech.SensorManager.Domain.Entities;
 
 using System.Diagnostics;
 using Tributech.SensorManager.Application.Sensors.Queries.Common;
+using Microsoft.Extensions.Caching.Memory;
+using Tributech.SensorManager.Application.Sensors.Common;
 
 namespace Tributech.SensorManager.Application.Sensors.Queries;
 
@@ -20,21 +22,20 @@ public class GetSensorQuery : IRequest<SensorVm>
     public Guid Id { get; set; }
 }
 
-public class GetSensorHandler : IRequestHandler<GetSensorQuery, SensorVm?>
+public class GetSensorHandler(ISensorContext _context, IMemoryCache _memoryCache)
+    : IRequestHandler<GetSensorQuery, SensorVm?>
 {
-    private readonly ISensorContext _context;
-
-    public GetSensorHandler(ISensorContext context)
-    {
-        _context = context;
-    }
-
     public async Task<SensorVm?> Handle(GetSensorQuery request, CancellationToken cancellationToken)
     {
-        var result = await _context.Sensors
-            .Include(s => s.Metadata)
-            .FirstOrDefaultAsync(s => s.Id == request.Id, cancellationToken);
+        return await _memoryCache.GetOrCreateAsync(CacheKeys.SensorItem(request.Id), async entry =>
+        {
+            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5);
 
-        return result == null ? null : new SensorVm(result);
+            var result = await _context.Sensors
+                .Include(s => s.Metadata)
+                .FirstOrDefaultAsync(s => s.Id == request.Id, cancellationToken);
+
+            return result == null ? null : new SensorVm(result);
+        });
     }
 }

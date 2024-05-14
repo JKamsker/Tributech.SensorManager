@@ -18,20 +18,12 @@ namespace Tributech.SensorManager.Api.Controllers;
 
 [ApiController, ApiVersion("1")]
 [Route("api/v{version:apiVersion}/sensors")]
-public class SensorsController : ControllerBase
+public class SensorsController(IMediator _mediator) : ControllerBase
 {
-    private readonly IMediator _mediator;
-
-    public SensorsController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-
     // https://localhost:7067/Sensor
     // admin@tributech.io
 
     [HttpGet]
-    [OutputCache]
     public async Task<ActionResult<List<SensorVm>>> GetAll()
     {
         return Ok(await _mediator.Send(new GetAllSensorsQuery()));

@@ -1,5 +1,7 @@
 ﻿using MediatR;
 
+using Microsoft.Extensions.Caching.Memory;
+
 using Tributech.SensorManager.Application.Sensors.Commands.Common;
 using Tributech.SensorManager.Application.Sensors.Common;
 using Tributech.SensorManager.Application.Sensors.Queries.Common;
@@ -15,7 +17,8 @@ public class CreateSensorCommand : IRequest<SensorVm>
     public IEnumerable<SensorMetadataVm>? Metadata { get; set; }
 }
 
-public class CreateSensorHandler(ISensorContext _context) : IRequestHandler<CreateSensorCommand, SensorVm>
+public class CreateSensorHandler(ISensorContext _context, IMemoryCache _memoryCache)
+    : IRequestHandler<CreateSensorCommand, SensorVm>
 {
     public async Task<SensorVm> Handle(CreateSensorCommand request, CancellationToken cancellationToken)
     {
@@ -34,6 +37,9 @@ public class CreateSensorHandler(ISensorContext _context) : IRequestHandler<Crea
 
         _context.Sensors.Add(sensor);
         await _context.SaveChangesAsync(cancellationToken);
+
+        _memoryCache.Remove(CacheKeys.SensorsList);
+
         return new(sensor);
     }
 

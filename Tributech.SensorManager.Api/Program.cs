@@ -100,24 +100,12 @@ public class Program
 
         services.AddValidatorsFromAssembly(typeof(ApplicationStub).Assembly);
 
+        services.AddMemoryCache();
+
         services.AddProblemDetails();
         services.AddExceptionHandler<CustomExceptionHandler>();
 
         services.AddKeycloakAuthentication(configuration);
-
-        services.AddResponseCaching(options =>
-        {
-            options.MaximumBodySize = 10 * 1024;
-            options.UseCaseSensitivePaths = true;
-        });
-
-        services.AddOutputCache(options =>
-        {
-            options.AddBasePolicy(builder => builder
-                .Expire(TimeSpan.FromSeconds(5))
-                .Cache()
-            );
-        });
 
         services.AddTestPlatformClient(configuration);
     }
