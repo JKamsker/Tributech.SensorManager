@@ -72,3 +72,15 @@ In-memory cache also scales okay but has the downside, that each request will mo
 External cache is slower, requires additional setup, but scales better and is more effective in a distributed environment.
 
 **TL;DR**: Scale alot? Use external cache. Scale no to little? Use in-memory cache.
+
+Implementations:
+- ``OutputCacheAttribute``: 
+  - Easy to use, but does not support anything else than in-memory cache. 
+  - Cache invalidation is also not possible. (atleast i was not able to find a way to invalidate the cache)
+  - Authorized requests are not cached. Even if the controller doesn't require authorization, but the client sends an authorization header, the request will not be cached.
+- ``MemoryCache``: In-memory cache, easy to use, but does not support distributed caching.
+- ``IDistributedCache``: Interface for distributed cache.  Implementations exists for In-Memory, Redis, CosmosDB, and more.
+
+``MemoryCache`` and ``IDistributedCache`` are the most common ways to cache data in .NET Core. 
+They are used in a similar way to ``Dictionary`` or much rather ``ConcurrentDictionary``.
+I believe the ``MemoryCache`` is just a Dictionary with some additional features like expiration time and cache invalidation.
